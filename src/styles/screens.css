@@ -22,7 +22,7 @@
 
 :root[data-theme="dark"] .hero-copy h1 span {
   display: inline-block;
-  margin-top: 0.12em;
+  margin-top: 0.18em;
   padding: 0 0.08em;
   background: var(--signal);
   box-decoration-break: clone;
@@ -527,6 +527,10 @@
   text-align: center;
 }
 
+.mobile-share-cta {
+  display: none;
+}
+
 @keyframes card-in {
   from {
     opacity: 0;
@@ -583,7 +587,11 @@
   }
 
   .hero-copy h1 {
-    font-size: clamp(2.7rem, 14vw, 4.4rem);
+    font-size: clamp(2.35rem, 12vw, 3.6rem);
+  }
+
+  .hero-copy h1 span {
+    white-space: nowrap;
   }
 
   .hero-actions {
@@ -618,6 +626,10 @@
     padding-top: 34px;
   }
 
+  .result-screen {
+    padding-bottom: calc(104px + env(safe-area-inset-bottom));
+  }
+
   .result-card {
     padding: 26px 20px;
   }
@@ -628,6 +640,20 @@
 
   .result-actions {
     grid-template-columns: 1fr;
+  }
+
+  .mobile-share-cta {
+    position: fixed;
+    z-index: 20;
+    right: 18px;
+    bottom: max(14px, env(safe-area-inset-bottom));
+    left: 18px;
+    display: inline-flex;
+    width: auto;
+  }
+
+  .share-dialog[open] + .mobile-share-cta {
+    display: none;
   }
 
   .result-footer {

@@ -137,6 +137,7 @@ export function renderResult({
   scores,
   leadScore = 0,
   leadPrimaryCount = 0,
+  leadMaxScore = 1,
 }) {
   const primary = results[primaryKey];
   const secondary = results[secondaryKey];
@@ -198,8 +199,8 @@ export function renderResult({
               isLeadResult
                 ? `
                   <div class="lead-meter">
-                    <div><span>总责信号</span><b>${leadScore} / 16</b></div>
-                    <div class="score-bar"><span style="width: ${(leadScore / 16) * 100}%; background: ${primary.color}"></span></div>
+                    <div><span>总责信号</span><b>${leadScore} / ${leadMaxScore}</b></div>
+                    <div class="score-bar"><span style="width: ${(leadScore / leadMaxScore) * 100}%; background: ${primary.color}"></span></div>
                     <small>${leadPrimaryCount} 次主动接手全局决策</small>
                   </div>
                 `
@@ -256,6 +257,14 @@ export function renderResult({
           <p class="share-save-hint">长按图片保存或分享</p>
         </div>
       </dialog>
+
+      <button
+        class="primary-button mobile-share-cta"
+        type="button"
+        data-action="share"
+      >
+        分享我的结果 <span aria-hidden="true">↗</span>
+      </button>
     </main>
   `;
 }

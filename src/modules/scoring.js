@@ -13,6 +13,8 @@ export function calculateResult(questions, answers) {
   const primaryCounts = emptyGroupRecord();
   let leadScore = 0;
   let leadPrimaryCount = 0;
+  let leadMaxScore = 0;
+  let leadMaxPrimaryCount = 0;
   const latestPrimaryQuestion = Object.fromEntries(
     GROUP_KEYS.map((group) => [group, -1]),
   );
@@ -22,6 +24,11 @@ export function calculateResult(questions, answers) {
     const option = question.options.find((candidate) => candidate.id === optionId);
     if (!option) continue;
 
+    const questionLeadMax = Math.max(
+      ...question.options.map((candidate) => candidate.lead ?? 0),
+    );
+    leadMaxScore += questionLeadMax;
+    if (questionLeadMax === 2) leadMaxPrimaryCount += 1;
     leadScore += option.lead ?? 0;
     if (option.lead === 2) leadPrimaryCount += 1;
 
@@ -47,7 +54,10 @@ export function calculateResult(questions, answers) {
     );
   });
 
-  const isHiddenLead = leadScore >= 12 && leadPrimaryCount >= 5;
+  const isHiddenLead =
+    leadMaxScore > 0 &&
+    leadScore >= Math.ceil(leadMaxScore * 0.75) &&
+    leadPrimaryCount >= Math.ceil(leadMaxPrimaryCount * 0.625);
 
   return {
     primary: isHiddenLead ? "lead" : rankedGroups[0],
@@ -56,5 +66,7 @@ export function calculateResult(questions, answers) {
     primaryCounts,
     leadScore,
     leadPrimaryCount,
+    leadMaxScore,
+    leadMaxPrimaryCount,
   };
 }

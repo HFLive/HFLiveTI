@@ -73,7 +73,7 @@ const renderQuiz = () => {
     question,
     optionOrder: session.optionOrder[questionId],
     currentIndex: session.currentIndex,
-    total: questions.length,
+    total: session.questionOrder.length,
     selectedOptionId: session.answers[questionId],
   });
   app.querySelector(".question-card")?.focus({ preventScroll: true });
@@ -87,6 +87,7 @@ const showResult = () => {
     scores: activeResult.scores,
     leadScore: activeResult.leadScore,
     leadPrimaryCount: activeResult.leadPrimaryCount,
+    leadMaxScore: activeResult.leadMaxScore,
   });
   window.scrollTo({ top: 0, behavior: "instant" });
 };
@@ -125,7 +126,8 @@ const answerCurrentQuestion = (optionId) => {
   showSelectedOption(optionId);
 
   window.setTimeout(() => {
-    const isLastQuestion = session.currentIndex === questions.length - 1;
+    const isLastQuestion =
+      session.currentIndex === session.questionOrder.length - 1;
     if (isLastQuestion) {
       app.innerHTML = renderLoading();
       window.setTimeout(() => {
@@ -161,16 +163,18 @@ const shareResult = async () => {
   const secondaryLabel =
     activeResult.primary === "lead" ? "专业侧重" : "第二倾向";
   const status = app.querySelector("[data-share-status]");
-  const shareButton = app.querySelector('[data-action="share"]');
+  const shareButtons = app.querySelectorAll('[data-action="share"]');
   const dialog = app.querySelector("[data-share-dialog]");
   const image = app.querySelector("[data-share-image]");
   const shareUrl = new URL(window.location.href);
   shareUrl.search = "";
   shareUrl.hash = "";
 
-  if (!status || !shareButton || !dialog || !image) return;
+  if (!status || shareButtons.length === 0 || !dialog || !image) return;
 
-  shareButton.disabled = true;
+  shareButtons.forEach((button) => {
+    button.disabled = true;
+  });
   status.textContent = "正在生成分享图片…";
 
   try {
@@ -191,7 +195,9 @@ const shareResult = async () => {
     status.textContent =
       error instanceof Error ? error.message : "分享图片生成失败，请重试";
   } finally {
-    shareButton.disabled = false;
+    shareButtons.forEach((button) => {
+      button.disabled = false;
+    });
   }
 };
 
@@ -223,7 +229,10 @@ app.addEventListener("click", (event) => {
 });
 
 session = loadSession(storage, questions);
-if (session && Object.keys(session.answers).length === questions.length) {
+if (
+  session &&
+  Object.keys(session.answers).length === session.questionOrder.length
+) {
   showResult();
 } else if (session) {
   renderQuiz();

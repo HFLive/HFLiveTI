@@ -1,5 +1,6 @@
 export const SESSION_KEY = "hflive-personality-test-session";
-export const SESSION_VERSION = 2;
+export const SESSION_VERSION = 3;
+export const QUIZ_QUESTION_COUNT = 10;
 
 export function shuffle(items, random = Math.random) {
   const shuffled = [...items];
@@ -11,14 +12,19 @@ export function shuffle(items, random = Math.random) {
 }
 
 export function createQuizSession(questions, random = Math.random) {
+  const questionOrder = shuffle(
+    questions.map((question) => question.id),
+    random,
+  ).slice(0, Math.min(QUIZ_QUESTION_COUNT, questions.length));
+  const selectedQuestions = questionOrder.map((questionId) =>
+    questions.find((question) => question.id === questionId),
+  );
+
   return {
     version: SESSION_VERSION,
-    questionOrder: shuffle(
-      questions.map((question) => question.id),
-      random,
-    ),
+    questionOrder,
     optionOrder: Object.fromEntries(
-      questions.map((question) => [
+      selectedQuestions.map((question) => [
         question.id,
         shuffle(
           question.options.map((option) => option.id),
@@ -41,22 +47,35 @@ function isValidSession(session, questions) {
   if (!session || session.version !== SESSION_VERSION) return false;
 
   const questionIds = questions.map((question) => question.id);
-  if (!sameIdSet(session.questionOrder, questionIds)) return false;
+  const expectedQuestionCount = Math.min(
+    QUIZ_QUESTION_COUNT,
+    questions.length,
+  );
+  if (
+    !Array.isArray(session.questionOrder) ||
+    session.questionOrder.length !== expectedQuestionCount ||
+    new Set(session.questionOrder).size !== expectedQuestionCount ||
+    !session.questionOrder.every((id) => questionIds.includes(id))
+  ) {
+    return false;
+  }
   if (
     !Number.isInteger(session.currentIndex) ||
     session.currentIndex < 0 ||
-    session.currentIndex >= questions.length
+    session.currentIndex >= session.questionOrder.length
   ) {
     return false;
   }
 
-  for (const question of questions) {
+  for (const questionId of session.questionOrder) {
+    const question = questions.find((candidate) => candidate.id === questionId);
     const optionIds = question.options.map((option) => option.id);
     if (!sameIdSet(session.optionOrder?.[question.id], optionIds)) return false;
   }
 
   if (!session.answers || typeof session.answers !== "object") return false;
   for (const [questionId, optionId] of Object.entries(session.answers)) {
+    if (!session.questionOrder.includes(questionId)) return false;
     const question = questions.find((candidate) => candidate.id === questionId);
     if (!question?.options.some((option) => option.id === optionId)) return false;
   }
