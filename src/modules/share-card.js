@@ -118,6 +118,9 @@ export async function createShareCard({
 }) {
   if (document.fonts?.ready) await document.fonts.ready;
 
+  const displayUrl = shareUrl
+    .replace(/^https?:\/\//i, "")
+    .replace(/\/$/, "");
   const canvas = document.createElement("canvas");
   canvas.width = CARD_WIDTH;
   canvas.height = CARD_HEIGHT;
@@ -230,7 +233,7 @@ export async function createShareCard({
   setFont(context, 42, 900);
   context.fillText("扫码测测你适合哪个组", 78, 1264);
   setFont(context, 25, 600);
-  drawWrappedText(context, shareUrl, 78, 1318, 600, 38, 2);
+  drawWrappedText(context, displayUrl, 78, 1318, 600, 38, 2);
 
   context.fillRect(78, 1388, 924, 4);
   setFont(context, 20, 800, MONO_STACK);
