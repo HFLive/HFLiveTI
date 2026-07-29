@@ -50,11 +50,11 @@ const drawWrappedText = (
   return y + lines.length * lineHeight;
 };
 
-const loadImage = (source) =>
+const loadImage = (source, errorMessage = "图片加载失败") =>
   new Promise((resolve, reject) => {
     const image = new Image();
     image.onload = () => resolve(image);
-    image.onerror = () => reject(new Error("二维码图片加载失败"));
+    image.onerror = () => reject(new Error(errorMessage));
     image.src = source;
   });
 
@@ -127,6 +127,10 @@ export async function createShareCard({
 
   const context = canvas.getContext("2d");
   if (!context) throw new Error("当前浏览器无法生成分享图片");
+  const characterImage = await loadImage(
+    primary.character,
+    "角色图片加载失败",
+  );
 
   context.fillStyle = "#f3f0e8";
   context.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
@@ -158,6 +162,15 @@ export async function createShareCard({
   context.fillText(primary.group, 102, 215);
   context.textBaseline = "alphabetic";
 
+  context.fillStyle = primary.color;
+  context.fillRect(742, 200, 260, 260);
+  context.fillStyle = "#fff";
+  context.fillRect(724, 182, 260, 260);
+  context.strokeStyle = "#11110f";
+  context.lineWidth = 4;
+  context.strokeRect(724, 182, 260, 260);
+  context.drawImage(characterImage, 724, 182, 260, 260);
+
   context.fillStyle = "#11110f";
   setFont(context, 25, 800, MONO_STACK);
   context.fillText("YOUR TEAM SIGNAL", 78, 298);
@@ -168,13 +181,13 @@ export async function createShareCard({
     primary.title,
     72,
     414,
-    900,
+    620,
     112,
     2,
   );
 
   context.fillStyle = primary.color;
-  context.fillRect(72, titleBottom - 45, 620, 30);
+  context.fillRect(72, titleBottom - 45, 540, 30);
   context.fillStyle = "#11110f";
   setFont(context, 38, 600);
   const descriptionBottom = drawWrappedText(
