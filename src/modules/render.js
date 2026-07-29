@@ -41,7 +41,7 @@ export function renderHome(totalQuestions) {
 
         <div class="signal-poster" aria-hidden="true">
           <div class="poster-grid"></div>
-          <img src="/assets/hflive-round.png" alt="" />
+          <img src="/assets/hflive-round.webp" alt="" />
           <span class="poster-code">HF / LIVE</span>
           <span class="poster-state">ON AIR</span>
         </div>
