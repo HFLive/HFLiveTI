@@ -3,6 +3,7 @@ export const results = {
 		group: "拍摄组",
 		title: "画面叙事家",
 		color: "#ff4b3e",
+		character: "/assets/characters/camera-operator.webp",
 		description:
 			"你善于判断什么值得被看见，也会考虑内容怎样组织得更清楚。观察、表达、临场选择和团队协作共同构成你的优势。",
 		roles: ["直播摄影师", "导播"],
@@ -13,6 +14,7 @@ export const results = {
 		group: "线路技术组",
 		title: "系统连接者",
 		color: "#3f7cff",
+		character: "/assets/characters/technical.webp",
 		description:
 			"你喜欢梳理结构、验证步骤，并帮助复杂流程稳定运行。动手尝试、现场沟通和问题定位共同构成你的优势。",
 		roles: ["线路通信", "网络工程师", "直播制作"],
@@ -23,6 +25,7 @@ export const results = {
 		group: "音响组",
 		title: "现场协调者",
 		color: "#9d61ff",
+		character: "/assets/characters/audio.webp",
 		description:
 			"你善于感受反馈、协调配合，并在变化中维持整体节奏。细节控制、沟通和稳定执行共同构成你的优势。",
 		roles: ["收音布设", "音响控制", "音效处理"],
@@ -33,6 +36,7 @@ export const results = {
 		group: "灯光组",
 		title: "空间塑造者",
 		color: "#f2c230",
+		character: "/assets/characters/lighting.webp",
 		description:
 			"你会关注空间给人的感受，也愿意通过多次调整找到合适效果。空间理解、时机判断和方案执行共同构成你的优势。",
 		roles: ["灯光控制", "场景设计"],
@@ -43,6 +47,7 @@ export const results = {
 		group: "直播总负责",
 		title: "现场主心骨",
 		color: "#d8ff3e",
+		character: "/assets/characters/lead.webp",
 		description:
 			"你会先看整场安排，再决定现在最该处理什么。遇到变化时，你习惯确认人员、调整顺序，并让每个人知道下一步。",
 		roles: ["责责~", "流程统筹", "现场决策", "跨组协调"],
