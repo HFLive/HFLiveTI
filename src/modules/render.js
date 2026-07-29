@@ -241,11 +241,6 @@ export function renderResult({
         </aside>
       </section>
 
-      <footer class="result-footer">
-        <span>结果代表适合优先体验的方向</span>
-        <span>所有感兴趣的岗位都值得尝试</span>
-      </footer>
-
       <dialog class="share-dialog" data-share-dialog aria-labelledby="share-dialog-title">
         <div class="share-dialog-panel">
           <div class="share-dialog-header">
@@ -276,6 +271,11 @@ export function renderResult({
       >
         分享我的结果 <span aria-hidden="true">↗</span>
       </button>
+
+      <footer class="result-footer">
+        <span>结果代表适合优先体验的方向</span>
+        <span>所有感兴趣的岗位都值得尝试</span>
+      </footer>
     </main>
   `;
 }

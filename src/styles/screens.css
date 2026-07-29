@@ -659,10 +659,6 @@
     padding-top: 34px;
   }
 
-  .result-screen {
-    padding-bottom: calc(104px + env(safe-area-inset-bottom));
-  }
-
   .result-card {
     padding: 26px 20px;
   }
@@ -675,14 +671,17 @@
     grid-template-columns: 1fr;
   }
 
+  .result-actions .primary-button {
+    display: none;
+  }
+
   .mobile-share-cta {
-    position: fixed;
+    position: sticky;
     z-index: 20;
-    right: 18px;
     bottom: max(14px, env(safe-area-inset-bottom));
-    left: 18px;
     display: inline-flex;
-    width: auto;
+    width: 100%;
+    margin-top: 20px;
   }
 
   .share-dialog[open] + .mobile-share-cta {
