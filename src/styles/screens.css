@@ -65,6 +65,7 @@
   position: absolute;
   z-index: 2;
   width: 72%;
+  height: auto;
   inset: 14% 14% auto;
   filter: invert(1);
   mix-blend-mode: screen;
