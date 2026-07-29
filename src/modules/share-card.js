@@ -1,5 +1,3 @@
-import QRCode from "qrcode";
-
 const CARD_WIDTH = 1080;
 const CARD_HEIGHT = 1440;
 const FONT_STACK =
@@ -116,6 +114,7 @@ export async function createShareCard({
   secondaryLabel,
   shareUrl,
 }) {
+  const qrCodeModulePromise = import("qrcode");
   if (document.fonts?.ready) await document.fonts.ready;
 
   const displayUrl = shareUrl
@@ -222,6 +221,7 @@ export async function createShareCard({
   setFont(context, 39, 900);
   context.fillText(secondary.group, 106, secondaryTop + 98);
 
+  const { default: QRCode } = await qrCodeModulePromise;
   const qrDataUrl = await QRCode.toDataURL(shareUrl, {
     errorCorrectionLevel: "M",
     margin: 0,
