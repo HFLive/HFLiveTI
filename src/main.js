@@ -4,8 +4,8 @@ import "./styles/screens.css";
 
 import { questions } from "./data/questions.js";
 import { results } from "./data/results.js";
+import { renderHome } from "./modules/home-template.js";
 import {
-  renderHome,
   renderLoading,
   renderQuestion,
   renderResult,
@@ -100,7 +100,7 @@ const startQuiz = () => {
 };
 
 const goHome = () => {
-  app.innerHTML = renderHome(questions.length);
+  app.innerHTML = renderHome();
   window.scrollTo({ top: 0, behavior: "instant" });
 };
 
@@ -228,6 +228,9 @@ app.addEventListener("click", (event) => {
   }
 });
 
+const hasStaticHome =
+  app.firstElementChild?.matches('[data-screen="home"]') ?? false;
+
 session = loadSession(storage, questions);
 if (
   session &&
@@ -236,6 +239,6 @@ if (
   showResult();
 } else if (session) {
   renderQuiz();
-} else {
+} else if (!hasStaticHome) {
   goHome();
 }
