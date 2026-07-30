@@ -127,13 +127,10 @@ export function renderResult({
               <p class="eyebrow">HFLIVE PERSONALITY RESULT</p>
               <h1>${escapeHtml(primary.title)}</h1>
             </div>
-            <figure class="result-character-frame">
-              <img
-                class="result-character"
-                src="${escapeHtml(primary.character)}"
-                alt="${escapeHtml(primary.group)}学生角色插画"
-              />
-            </figure>
+            <figure
+              class="result-character-frame"
+              data-result-character
+            ></figure>
           </div>
           <p class="result-description">${escapeHtml(primary.description)}</p>
 

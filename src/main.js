@@ -23,6 +23,7 @@ const app = document.querySelector("#app");
 let session = null;
 let answerLocked = false;
 let activeResult = null;
+const resultCharacterCache = new Map();
 
 const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
 const requestedTheme = new URLSearchParams(window.location.search).get(
@@ -79,8 +80,24 @@ const renderQuiz = () => {
   app.querySelector(".question-card")?.focus({ preventScroll: true });
 };
 
-const showResult = () => {
-  activeResult = calculateResult(questions, session.answers);
+const getResultCharacter = (result) => {
+  const primary = results[result.primary];
+  const cachedImage = resultCharacterCache.get(primary.character);
+  if (cachedImage) return cachedImage;
+
+  const image = new Image();
+  image.className = "result-character";
+  image.alt = `${primary.group}学生角色插画`;
+  image.decoding = "async";
+  image.fetchPriority = "high";
+  image.src = primary.character;
+  resultCharacterCache.set(primary.character, image);
+  return image;
+};
+
+const showResult = (result = calculateResult(questions, session.answers)) => {
+  activeResult = result;
+  const resultCharacter = getResultCharacter(activeResult);
   app.innerHTML = renderResult({
     primaryKey: activeResult.primary,
     secondaryKey: activeResult.secondary,
@@ -89,6 +106,7 @@ const showResult = () => {
     leadPrimaryCount: activeResult.leadPrimaryCount,
     leadMaxScore: activeResult.leadMaxScore,
   });
+  app.querySelector("[data-result-character]")?.append(resultCharacter);
   window.scrollTo({ top: 0, behavior: "instant" });
 };
 
@@ -124,14 +142,18 @@ const answerCurrentQuestion = (optionId) => {
   session.answers[questionId] = optionId;
   saveSession(storage, session);
   showSelectedOption(optionId);
+  const isLastQuestion =
+    session.currentIndex === session.questionOrder.length - 1;
+  const pendingResult = isLastQuestion
+    ? calculateResult(questions, session.answers)
+    : null;
+  if (pendingResult) getResultCharacter(pendingResult);
 
   window.setTimeout(() => {
-    const isLastQuestion =
-      session.currentIndex === session.questionOrder.length - 1;
     if (isLastQuestion) {
       app.innerHTML = renderLoading();
       window.setTimeout(() => {
-        showResult();
+        showResult(pendingResult);
         answerLocked = false;
       }, 720);
       return;
